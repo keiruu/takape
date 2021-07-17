@@ -1,0 +1,51 @@
+:root{
+    --primary: #886138;
+}
+
+.btn{
+    font-family: 'Poppins', sans-serif;
+    padding: 0.3rem 1rem;
+    border-radius: 30px 30px 30px 5px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover{
+    padding: 0.3rem 1rem;
+    transition: all 0.2s ease-out;
+    background: white;
+    color: var(--primary);
+}
+
+.btn--primary{
+    background-color: var(--primary);
+}
+
+.btn--outline{
+    background-color: transparent;
+    color: var(--primary);
+    padding: 0.3rem 1rem;
+    border-radius: 30px 30px 30px 5px;
+    border: 1px solid #C6B39F;
+    transition: all 0.3s ease-out;
+}
+
+.btn--outline:hover{
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+    color: white;
+}
+
+.btn--medium{
+    padding: 0.3rem 1rem;
+    font-size: 16px;
+
+}
+
+.btn--large{
+    padding: 0.3rem 1rem;
+    border-radius: 4px;
+    color: white;
+}
+
