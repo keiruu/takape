@@ -20,6 +20,10 @@
 
 .btn--primary{
     background-color: var(--primary);
+    color: white;
+    border-radius: 15px;
+    width: 20vw;
+    padding: 2rem;
 }
 
 .btn--outline{
