@@ -1,30 +1,26 @@
-import './App.css';
-import Navbar from './components/Navbar/Navbar'
-import Signup from './components/Signup'
-import { Container } from 'react-bootstrap'
+import './styles/App.css';
+import Navbar from './components/Navbar';
 import { AuthProvider } from './contexts/AuthContext';
-import { BrowserRouter as Router, Switch, Route} from 'react-router-dom'
-import Login from './components/Login'
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import Login from './components/Login';
+import Home from './components/Home';
+import PrivateRoute from './components/PrivateRoute';
+import ForgotPassword from './components/ForgotPassword';
+import UpdateProfile from './components/UpdateProfile';
+
 function App() {
   return (
     <div className="App">
-        
-          <Container className="d-flex align-items-center justify-content-center"
-          style={{minHeight: "60vh"}}>
-
-            <div className="w-100" style={{maxWidth: '450px'}}>
               <Router>
                 <AuthProvider>
                   <Switch>
-                    <Route exact path="/" component={Navbar}/>
-                    <Route path="/signup" component={Signup}/>
+                    <PrivateRoute exact path="/" component={Home}/>
+                    <PrivateRoute path="/update-profile" component={UpdateProfile}/>
                     <Route path="/login" component={Login}/>
+                    <Route path="/forgot-password" component={ForgotPassword}/>
                   </Switch>
                 </AuthProvider>
-              </Router>
-
-            </div>
-          </Container>
+              </Router> 
     </div>
   );
 }
