@@ -2,15 +2,13 @@ import React, {useRef, useState} from 'react'
 import {useAuth} from '../contexts/AuthContext'
 import { Link, useHistory } from 'react-router-dom'
 import Navbar from './Navbar'
-import '../styles/Login.css'
+import 'tippy.js/animations/scale.css';
+import Tippy from '@tippyjs/react';
 
 export default function Login() {
 
     const signin_emailRef = useRef()
     const signin_passwordRef = useRef()
-    const signup_emailRef = useRef()
-    const signup_passwordRef = useRef()
-    const signup_passwordconfirmRef = useRef()
     const {login, signup} = useAuth()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
@@ -20,38 +18,17 @@ export default function Login() {
         e.preventDefault()
 
         try {
-          setError("")
-          setLoading(true)
-          await login(signin_emailRef.current.value, signin_passwordRef.current.value)
-          history.push('/')
+            setError("")
+            setLoading(true)
+            await login(signin_emailRef.current.value, signin_passwordRef.current.value)
+            history.push('/')
         } catch(err){
-          setError(err.message)
+            setShowError(true)
+            setError(err.message)
         }
     
         setLoading(false)
     }
-
-    async function handleSignup(e) {
-        e.preventDefault()
-    
-        if(signup_passwordRef.current.value !== signup_passwordconfirmRef.current.value){
-            setError("Passwords don't match")
-            console.log("Passwords don't match")
-        } else {
-            try {
-                setError("")
-                setLoading(true)
-                await signup(signup_emailRef.current.value, signup_passwordRef.current.value)
-                history.push('/')
-              } catch(err) {
-                console.log(err.message)
-                setError(err.message)
-              }
-        }
-    
-        setLoading(false)
-    }
-
 
     // code to trigger transition animation
     const [isActive, setActive] = useState(false);
@@ -59,117 +36,41 @@ export default function Login() {
         setActive(!isActive);
     };
 
+    // code to trigger tooltip errors
+    const [showerror, setShowError] = useState(false)
+
     return (
         <>
             <Navbar/>
-            <div className={isActive ? 'formcontainer sign-up-mode': 'formcontainer'}>
-                <div className="forms-container">
-                    <div className="signin-signup">
 
-                    {/* SIGN IN FORM */}
-                    <form action="#" class="sign-in-form" onSubmit={handleSignin}>
-                        <h2 className="title">Sign in</h2>
-                        <p className="errormessage">{error}</p>
-                        <div className="input-field">
-                            <i className="fas fa-user"></i>
-                            <input type="text" placeholder="Email" ref={signin_emailRef}/>
-                        </div>
-
-                        <div className="input-field">
-                            <i className="fas fa-lock"></i>
-                            <input type="password" placeholder="Password" ref={signin_passwordRef} />
-                        </div>
-                        <div className="forgotpassword">
-                            <Link to="/forgot-password">Forgot Password?</Link>
-                        </div>
-                            <input disabled={loading} type="submit" value="Login" className="btn solid" />
-                            <p className="social-text">Or Sign in with</p>
-
-                        <div className="social-media">
-                            <a href="#" className="social-icon">
-                                <i className="fab fa-facebook-f"></i>
-                            </a>
-                            <a href="#" className="social-icon">
-                                <i className="fab fa-twitter"></i>
-                            </a>
-                            <a href="#" className="social-icon">
-                                <i className="fab fa-google"></i>
-                            </a>
-                            <a href="#" className="social-icon">
-                                <i className="fab fa-linkedin-in"></i>
-                            </a>
-                        </div>
-                    </form>
-
-                    {/* SIGN UP FORM */}
-                    <form action="#" className="sign-up-form" onSubmit={handleSignup}>
-                        <h2 className="title">Sign up</h2>
-                        <p className="errormessage">{error}</p>
-                        <div className="input-field">
-                            <i className="fas fa-envelope"></i>
-                            <input type="email" placeholder="Email" ref={signup_emailRef} />
-                        </div>
-                        <div className="input-field">
-                            <i className="fas fa-lock"></i>
-                            <input type="password" placeholder="Password" ref={signup_passwordRef}/>
-                        </div>
-                        <div className="input-field">
-                            <i className="fas fa-lock"></i>
-                            <input type="password" placeholder="Confirm Password" ref={signup_passwordconfirmRef}/>
-                        </div>
-                        
-                            <input disabled={loading} type="submit" className="btn" value="Sign up" />
-                            <p className="social-text">Or Sign up with social platforms</p>
-
-
-                        <div className="social-media">
-                            <a href="#" className="social-icon">
-                                <i className="fab fa-facebook-f"></i>
-                            </a>
-                            <a href="#" className="social-icon">
-                                <i className="fab fa-twitter"></i>
-                            </a>
-                            <a href="#" className="social-icon">
-                                <i className="fab fa-google"></i>
-                            </a>
-                            <a href="#" className="social-icon">
-                                <i className="fab fa-linkedin-in"></i>
-                            </a>
-                        </div>
-
-                    </form>
-
-                    </div>
+            <div className="flex flex-col px-10 md:pl-48 lg:flex-row justify-center bg-white lg:p-16 py-20 md:gap-x-32 rounded-3xl lg:w-med m-auto shadow-gray mt-10">
+                <div className="items-center lg:mb-14">
+                    <p className="my-2 mt-2 md:mt-8 text-accent font-semibold ">━ Welcome Back! 👋</p>
+                    <p className="font-bold text-5xl md:text-6xl lg:text-7xl my-6 mt-10 text-darkaccent">Sign In</p>
+                    <p className="my-1 mt-10 text-darkaccent text-sm md:text-md">Don't have an account?</p>
+                    <Link to="/register" className="underline text-darkaccent transition-all hover:text-accent text-sm md:text-md">Join us!</Link>
                 </div>
+                <form className="flex flex-col mt-8 lg:mt-4 lg:m-0" action="#" onSubmit={handleSignin}>
+                    <Tippy visible={showerror} content={error} onClickOutside={() => setShowError(false)}>
+                        <div>
+                            <i className="fas fa-envelope absolute py-8 md:py-8.5 px-4 text-gray"></i>
+                            <input className="focus:outline-none focus:ring focus:border-lightaccent hover:border-accent border-2 border-transparent transition-all bg-lightgray p-4 w-72 md:w-96 md:text-md text-sm rounded-lg my-3 pl-12" type="email" placeholder="Enter your email" ref={signin_emailRef} />
+                        </div>
+                    </Tippy>
 
-                <div className="panels-container">
-                    <div className="panel left-panel">
-                    <div className="content">
-                        <h3>Don't have an account?</h3>
-                        <p>
-                        
-                        </p>
-                        <button className='btn transparent' id="sign-up-btn" onClick={toggleClass}>
-                            Sign up
-                        </button>
+                    <div>
+                        <i className="fas fa-lock absolute py-8.5 px-4 text-gray"></i>
+                        <input className="focus:outline-none focus:ring focus:border-lightaccent hover:border-accent border-2 border-transparent transition-all bg-lightgray p-4 w-72 md:w-96 md:text-md text-sm rounded-lg my-3 pl-12" type="password" placeholder="Enter password" ref={signin_passwordRef} />
                     </div>
-                    <img src="img/log.svg" class="image" alt="" />
-                    </div>
-                    <div className="panel right-panel">
-                    <div className="content">
-                        <h3>Already have an account?</h3>
-                        <p>
-                        
-                        </p>
-                        <button className="btn transparent" id="sign-in-btn" onClick={toggleClass}>
-                        Sign in
-                        </button>
-                    </div>
-                    <img src="img/register.svg" className="image" alt="" />
-                    </div>
-                </div>
+                    
+                    <button disabled={loading} type="submit" className="animate-bounce bg-bggradient w-1/2 text-white p-2 py-4 rounded-xl shadow-light my-4 mt-8 hover:border-white border-2 border-transparent transition-all font-semibold">
+                        Login
+                        <i className="fas fa-arrow-right mx-2"></i>
+                    </button>
+                </form>
             </div>
-            <div className="h-36"></div>
+        
+            <div className="h-screen"></div>
         </>
     )
 }
