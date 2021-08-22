@@ -2,6 +2,7 @@ import './styles/App.css';
 import Navbar from './components/Navbar';
 import { AuthProvider } from './contexts/AuthContext';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import Signup from './components/Signup';
 import Login from './components/Login';
 import Home from './components/Home';
 import PrivateRoute from './components/PrivateRoute';
@@ -16,6 +17,7 @@ function App() {
                   <Switch>
                     <PrivateRoute exact path="/" component={Home}/>
                     <PrivateRoute path="/update-profile" component={UpdateProfile}/>
+                    <Route path="/register" component={Signup}/>
                     <Route path="/login" component={Login}/>
                     <Route path="/forgot-password" component={ForgotPassword}/>
                   </Switch>

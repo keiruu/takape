@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import logo from '../img/takapetextandlogo.svg'
+import logoicon from '../img/takapelogo.svg'
 
 const navigation = [
     { name: 'Home', href: '#', current: true },
@@ -44,11 +45,11 @@ export default function Navbar() {
 
         <div>
                     
-            <Disclosure as="nav" className="py-4 mb-0 sm:mb-20">
+            <Disclosure as="nav" className="py-4 mb-0 ">
             {({ open }) => (
                 <>
-                <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8">
-                    {/* MOBILE */}
+                <div className="max-w-5xl mx-auto px-2 sm:px-6 lg:px-8">
+        
                     <div className="relative flex items-center justify-between h-16">
                         <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                                 {/* Mobile menu button*/}
@@ -63,18 +64,18 @@ export default function Navbar() {
                         </div>
 
                         <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-between">
+                            {/* takape logo */}
                             <div className="flex-shrink-0 flex items-center">
-                                <img
-                                    className="hidden lg:block h-10 w-auto "
-                                    src={logo}
-                                    alt="takape.ph"
-                                    
-                                />
+                                <picture>
+                                    <source srcset={logo} media="(min-width: 1024px)" />
+                                    <source srcset={logo} media="(min-width: 768px)" />
+                                    <img src={logoicon} alt="takape.ph" className="lg:block h-10 w-auto"/>
+                                </picture>
                             </div>
 
                             {/* menus */}
                             <div className="hidden sm:block sm:ml-6">
-                                <div className="flex space-x-4 justify-items-end">
+                                <div className="flex space-x-6 justify-items-end">
                                     {navigation.map((item) => (
                                     <a
                                         key={item.name}
@@ -117,7 +118,7 @@ export default function Navbar() {
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95"
                         >
-                            <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <Menu.Items className=" origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <Menu.Item>
                                 {({ active }) => (
                                 <a
@@ -151,8 +152,11 @@ export default function Navbar() {
                             </Menu.Items>
                         </Transition>
                         </Menu>
-                        <button class={currentUser ? "hidden" : "bg-brown hover:bg-transparent text-white font-semibold hover:text-brown px-3 py-2 rounded-lg text-sm font-medium border border-transparent hover:border-brown rounded"}>
-                            Sign Up
+
+                        {/* SIGN UP BUTTON */}
+                        <button class={currentUser ? "hidden" : 
+                        "bg-bggradient shadow-light transition-all hover:border-bggradient hover:bg-none hover:text-white text-white font-semibold px-3 py-2 rounded-lg text-sm font-medium border border-transparent rounded"}>
+                            Sign In
                         </button>         
                     </div>
                     </div>

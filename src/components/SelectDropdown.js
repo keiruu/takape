@@ -28,11 +28,19 @@ function cityobject(selected){
 }
 
 
-export default function SelectDropdown({dropdown, clickHandler, disabled, selected}){
+export default function SelectDropdown({dropdown, clickHandler, disabled, selected, }){
   return(
     <Fragment>
-      <Select placeholder={dropdown === "provinceobj" ? <div>Select a province</div> : <div>Select a city</div>} isDisabled={disabled} isSearchable={true} options={dropdown === "provinceobj" ? provinceobj : cityobject(selected)} className="w-56 text-left m-2" onChange={clickHandler}/>
-      {/* <Select isDisabled={disable} isClearable={true} isSearchable={true} options={dropdown === "provinceobj" ? provinceobj : cityobj} className={dropdown === "cityobj" ? "w-56 text-left mx-2" : "hidden"}/> */}
+      <Select placeholder={dropdown === "provinceobj" ? <div>Select a province</div> : <div>Select a city</div>} isDisabled={disabled} isSearchable={true} options={dropdown === "provinceobj" ? provinceobj : cityobject(selected)} className="w-60 lg:w-80 text-left m-2 lg:text-lg" onChange={clickHandler}
+      theme={theme => ({
+        ...theme,
+        borderRadius: 10,
+        colors: {
+          ...theme.colors,
+          primary25: '#EAE0D7',
+          primary: '#EAE0D7',
+        },
+      })}/>
     </Fragment>
   )
 }

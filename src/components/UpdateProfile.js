@@ -2,7 +2,6 @@ import React, {useRef, useState} from 'react'
 import {useAuth} from '../contexts/AuthContext'
 import { Link, useHistory } from 'react-router-dom'
 import Navbar from './Navbar'
-import '../styles/Login.css'
 
 export default function UpdateProfile() {
 
