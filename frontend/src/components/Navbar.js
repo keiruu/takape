@@ -1,11 +1,12 @@
 import React, {useState, Fragment} from 'react'
 import '../styles/Navbar.css'
-import { Link, useHistory} from 'react-router-dom'
+import { Link, useHistory, useLocation, NavLink} from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import logo from '../img/takapetextandlogo.svg'
 import logoicon from '../img/takapelogo.svg'
+
 
 const navigation = [
     { name: 'Home', href: '/', current: true },
@@ -21,12 +22,15 @@ function classNames(...classes) {
 
 export default function Navbar() {
     
+    let location = useLocation();
     const [isActive, setActive] = useState(false);
     const [error, setError] = useState('')
     const {logout, currentUser} = useAuth()
     const history = useHistory()
 
-    const handleClick = () => {
+    const HandleClick = (e) => {
+        e.preventDefault()
+        console.log(location.pathname);
         setActive(!isActive);
     };
 
@@ -45,11 +49,10 @@ export default function Navbar() {
 
         <div>
                     
-            <Disclosure as="nav" className="py-4 mb-0 ">
+            <Disclosure as="nav" className="shadow-gray w-full bg-white">
             {({ open }) => (
                 <>
-                <div className="max-w-5xl mx-auto px-2 sm:px-6 lg:px-8">
-        
+                <div className="max-w-5xl mx-auto px-2 sm:px-6 lg:px-8 py-2">
                     <div className="relative flex items-center justify-between h-16">
                         <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                                 {/* Mobile menu button*/}
@@ -77,18 +80,20 @@ export default function Navbar() {
                             <div className="hidden sm:block sm:ml-6">
                                 <div className="flex space-x-6 justify-items-end">
                                     {navigation.map((item) => (
-                                    <a
+                                    <NavLink
                                         key={item.name}
-                                        href={item.href}
-                                        className={classNames(
-                                        item.current ? 'rounded-none text-medbrown transition-all hover:text-brown border-medbrown border-b-2 px-2' : ' px-3 rounded-lg text-brown transition-all hover:bg-medbrown hover:text-white',
-                                        'py-2 text-sm font-bold'
-                                        )}
-                                        aria-current={item.current ? 'page' : undefined}
-                                        onClick={handleClick}
+                                        to={item.href}
+                                        exact 
+                                        activeStyle={{
+                                            borderRadius: "none",
+                                            backgroundColor: "#FFF5E1",
+                                            color: "#C9593F",
+                                        }}
+                                        className='px-3 rounded-lg text-brown transition-all hover:bg-lightaccent hover:text-accent py-2 text-sm font-bold'
                                     >
                                         {item.name}
-                                    </a>
+                                    </NavLink>
+
                                     ))}
                                 </div>
                             </div>
@@ -155,7 +160,7 @@ export default function Navbar() {
                         </Menu>
 
                         {/* SIGN UP BUTTON */}
-                        <button class={currentUser ? "hidden" : 
+                        <button className={currentUser ? "hidden" : 
                         "bg-bggradient shadow-light transition-all hover:border-bggradient hover:bg-none hover:text-white text-white font-semibold px-3 py-2 rounded-lg text-sm font-medium border border-transparent rounded"}>
                             Sign In
                         </button>         
