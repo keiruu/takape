@@ -80,7 +80,9 @@ export function CafeProvider({children}) {
         buttonDisable,
         setButtonDisable,
         selected, 
-        setSelected
+        setSelected,
+        loading,
+        setLoading
     }
 
 

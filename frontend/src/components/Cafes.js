@@ -4,10 +4,13 @@ import { Link } from "react-router-dom";
 import Navbar from '../components/Navbar'
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { useAuth } from '../contexts/AuthContext'
 
 import '../styles/App.css'
 
 export const Cafes = props => {
+    const {currentUser, userUID} = useAuth()
+
     const initialCafeState = {
         id: null,
         name: "",
@@ -19,9 +22,10 @@ export const Cafes = props => {
         logo: "",
         reviews: []
       };
-      const [cafe, setCafe] = useState(initialCafeState);
+      
+    const [cafe, setCafe] = useState(initialCafeState);
     
-      const getCafe = id => {
+    const getCafe = id => {
         CafeDataService.get(id)
           .then(response => {
             setCafe(response.data);
@@ -29,15 +33,15 @@ export const Cafes = props => {
           })
           .catch(e => {
             console.log(e);
-          });
-      };
+        });
+    };
     
-      useEffect(() => {
+    useEffect(() => {
         getCafe(props.match.params.id);
-      }, [props.match.params.id]);
+    }, [props.match.params.id]);
     
-      const deleteReview = (reviewId, index) => {
-        CafeDataService.deleteReview(reviewId, props.user.id)
+    const deleteReview = (reviewId, index) => {
+        CafeDataService.deleteReview(reviewId, userUID)
           .then(response => {
             setCafe((prevState) => {
               prevState.reviews.splice(index, 1)
@@ -49,23 +53,22 @@ export const Cafes = props => {
           .catch(e => {
             console.log(e);
           });
-      };
+    };
     
       return (
         <div>
             <Navbar/>
           {cafe ? (
             <div className="flex flex-col m-auto mt-10 gap-y-20">
-                <div className="flex flex-col lg:flex-row bg-white shadow-gray md:w-medsm lg:w-med p-4 rounded-xl m-auto gap-x-10 py-6">
-                    <div className="overflow-hidden w-full lg:w-1/2 h-80">
+                <div className="flex flex-col md:flex-row bg-white shadow-gray md:w-full lg:w-med p-4 lg:rounded-xl m-auto gap-x-10 py-6">
+                    <div className="overflow-hidden w-full md:w-1/2 h-64 md:h-80">
                         <img src={cafe.img} className="object-cover h-full w-full" alt="Cafe"/>
                     </div>
-                    <div className="mt-6 w-1/2 relative pr-10">
+                    <div className="mt-6 w-full md:w-1/2 relative md:pr-10">
                         <h5 className="font-bold text-3xl">{cafe.name}</h5>
                         <p className="text-lg">{cafe.address}<br/></p>
 
                         <div className="mt-3 flex gap-x-2 ">
-                              {/* <span className="text-xs mr-2">Tags:</span>   */}
                               <Tippy content="Click to go to their Facebook Page" animation="scale" placement="bottom">
                                 <div className="rounded-lg bg-lightaccent text-accent p-1 px-2">
                                   <a href={cafe.link} target="_blank" rel="noreferrer">
@@ -78,16 +81,18 @@ export const Cafes = props => {
                               
                         </div>
                         
-                        <div className="flex flex-col mt-14">
-                          <p className="">
-                              
-                          </p>
-                          <Link to={"/cafes/" + props.match.params.id + "/review"}>
-                              <button className="bg-accent p-3 transition px-6 font-semibold text-white rounded-lg hover:bg-transparent border-2 border-accent hover:text-accent"><i className="fas fa-pen-square mr-2"></i>Review Cafe</button>
-                          </Link>  
+                        <div className="block md:relative mt-14">
+                          <div className="block md:absolute md:-bottom-16 flex gap-x-2 justify-end">
+                            <Link to="/cafes" className="block md:hidden">
+                              <button className="bg-lightaccent p-3 px-3 md:px-6 text-sm md:text-md transition font-semibold text-accent rounded-lg hover:bg-transparent border-2 border-lightaccent"><i className="fas fa-arrow-left mr-2"></i>Go Back</button>
+                            </Link>
+                            <Link to={"/cafes/" + props.match.params.id + "/review"}>
+                                <button className="bg-accent p-3 px-3 md:px-6 text-sm md:text-md transition font-semibold text-white rounded-lg hover:bg-transparent border-2 border-accent hover:text-accent"><i className="fas fa-pen-square mr-2"></i>Review Cafe</button>
+                            </Link> 
+                          </div> 
                         </div>
 
-                        <div className="absolute right-4 -top-4">
+                        <div className="hidden md:absolute md:block right-4 -top-4 ">
                           <Link to="/cafes" className="underline">
                             <i class="fas fa-arrow-left"></i>
                           </Link>
@@ -96,14 +101,34 @@ export const Cafes = props => {
 
                 </div>
 
-                <div className="text-center bg-white pt-10 rounded-3xl">
-                    <h4 className="font-bold text-2xl"> Reviews </h4>
+                <div className="text-center bg-white pt-10 rounded-3xl flex flex-col gap-y-4 pb-">
+                    <h4 className="font-bold text-2xl mb-8"> Reviews </h4>
+                    
                         {cafe.reviews.length > 0 ? 
                             (cafe.reviews.map((review, index) => {
                             return (
-                                <div className="bg-white m-auto flex justify-center" key={index}>
+                                <div className="relative text-left bg-white m-auto flex shadow-gray p-4 w-medsm rounded-xl" key={index}>
                                     <div>
+                                        <span className="font-bold">{review.name}</span><br/>
                                         <h1>{review.text}</h1>
+                                        <span className="text-xs opacity-40">Posted: {review.date}</span>
+                                       
+
+                                        {userUID === review.user_id &&
+                                            <div className="flex gap-x-5 absolute right-5 top-4">
+                                              <Link to={{
+                                                pathname: "/cafes/" + props.match.params.id + "/review",
+                                                state: {
+                                                  currentReview: review
+                                                }
+                                              }}>
+                                                <button className="text-green-500">
+                                                  <i class="fas fa-edit"></i>
+                                                </button>
+                                              </Link>
+                                              <button onClick={() => deleteReview(review._id, index)} className="text-accent"><i class="fas fa-trash"></i></button>
+                                            </div>                   
+                                        }
                                     </div>
                                 </div>
                             );

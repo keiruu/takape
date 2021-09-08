@@ -1,7 +1,7 @@
 import './styles/App.css';
 import Navbar from './components/Navbar';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useHistory} from 'react-router-dom';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -10,10 +10,12 @@ import ForgotPassword from './pages/ForgotPassword';
 import UpdateProfile from './pages/UpdateProfile';
 import Cafe from './pages/Cafe';
 import { Cafes } from './components/Cafes';
+import AddReview from './components/AddReview';
+import Footer from './components/Footer';
+import React, {useEffect} from 'react';
 
 function App() {
-  // const {currentUser} = useAuth()
-
+  
   return (
     <div className="App">
               <Router>
@@ -25,10 +27,19 @@ function App() {
                     <Route path="/forgot-password" component={ForgotPassword}/>
                     <PrivateRoute exact path="/" component={Home}/>
                     <Route exact path="/cafes" component={Cafe}/>
+                    <Route
+                      path="/cafes/:id/review"
+                      render={(props) => (
+                        <AddReview {...props}/>
+                      )}
+                    />
                     <Route 
                       path="/cafes/:id"
                       render={(props) => (
-                        <Cafes {...props} />
+                        <div>
+                          <Cafes {...props} />
+                          <Footer/>
+                        </div>
                       )}
                     />
                   </Switch>

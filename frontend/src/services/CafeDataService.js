@@ -20,11 +20,11 @@ class CafeDataService {
     }
 
     updateReview(data){
-        return http.post("/review", data)
+        return http.put("/review", data)
     }
 
-    deleteReview(id){
-        return http.post(`/review?id=${id}`)
+    deleteReview(id, userId){
+        return http.delete(`/review?id=${id}`, {data: {user_id: userId}})
     }
 }
 

@@ -47,6 +47,7 @@ module.exports = {
       },
       borderRadius: {
         '1/2': '50%',
+        '1/4': '40%',
       },
       backgroundImage: theme => ({
         'bg': "url('/src/img/takapebg.svg')",

@@ -12,7 +12,7 @@ export default class CafesDAO {
             return
         }
         try {
-            cafes = await conn.db(process.env.CAFES_NS).collection("cafes")
+            cafes = await conn.db(process.env.CAFE_NS).collection("cafes")
             // update the field names because I imported it wrong 
             // cafes.updateMany( {}, { $rename: { "cafe_name": "name", "PROVINCE": "province", "CITY": "city", "ADDRESS": "address", "SOCMED_LINK": "socials"} } )
         } catch (e){
