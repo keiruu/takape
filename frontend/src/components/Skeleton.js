@@ -1,18 +1,8 @@
-import React, {useState, useContext, useRef} from 'react'
-import { Link, useHistory } from 'react-router-dom'
-
-import SelectDropdown from '../components/SelectDropdown' 
+import React, {useState, useContext} from 'react'
+import { Link } from 'react-router-dom'
 import { CafeContext } from '../contexts/CafeContext';
-
-import { loadAnimation } from "lottie-web";
-import { defineLordIconElement } from "lord-icon-element";
-import side_img from "../img/headersideimg.svg"
-
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
 import Skeleton from 'react-loading-skeleton';
 
-defineLordIconElement(loadAnimation);
 
 export default function SkeletonLoader(props) {
     const cafe = useContext(CafeContext)
