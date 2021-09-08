@@ -1,6 +1,7 @@
 import './styles/App.css';
 import Navbar from './components/Navbar';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
+import { CafeContext } from './contexts/CafeContext';
 import { BrowserRouter as Router, Switch, Route, useHistory} from 'react-router-dom';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
@@ -12,10 +13,19 @@ import Cafe from './pages/Cafe';
 import { Cafes } from './components/Cafes';
 import AddReview from './components/AddReview';
 import Footer from './components/Footer';
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
+import SkeletonCafe from './components/SkeletonCafe';
 
 function App() {
-  
+  const cafe = useContext(CafeContext)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+        cafe.setLoading(false)
+        console.log("App.js")
+    }, 1000)
+  }, [])
+
   return (
     <div className="App">
               <Router>
@@ -37,7 +47,7 @@ function App() {
                       path="/cafes/:id"
                       render={(props) => (
                         <div>
-                          <Cafes {...props} />
+                          {cafe.loading ? <SkeletonCafe/> : <Cafes {...props} /> }
                           <Footer/>
                         </div>
                       )}

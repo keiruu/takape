@@ -63,10 +63,12 @@ export default function CafesList(props) {
         cafe.setLoading(true)
         const timer = setTimeout(() => {
             cafe.setLoading(false)
-        }, 2000)
+        }, 1000)
     }, [])
 
-    
+    const skeletonHandler = () => {
+        cafe.setLoading(true)
+    }
     
     return (
         <div>
@@ -125,7 +127,7 @@ export default function CafesList(props) {
                                          
                                          <div className="bg-white shadow-gray w-full rounded-2xl ">
                                              <div className="w-full h-52 overflow-hidden rounded-t-2xl bg-black cursor-pointer">
-                                                 <Link to={`/cafes/${cafes._id}`}><img src={cafes.logo} className="opacity-50 hover:opacity-100 object-cover h-52 w-full rounded-t-2xl transition-all transform hover:scale-105" alt=""/></Link>
+                                                 <Link to={`/cafes/${cafes._id}`} onClick={skeletonHandler}><img src={cafes.logo} className="opacity-50 hover:opacity-100 object-cover h-52 w-full rounded-t-2xl transition-all transform hover:scale-105" alt=""/></Link>
                                                  
                                              </div>
                                              <div className="p-6">
@@ -135,7 +137,7 @@ export default function CafesList(props) {
                                              </div>
                                              <div className="flex justify-center">
                                                  <Link to={`/cafes/${cafes._id}`}>
-                                                     <button className="bg-lightergray rounded-xl mb-4 py-2 px-28 border-2 border-lightergray transition-all hover:bg-white hover:border-lightergray">
+                                                     <button onClick={skeletonHandler} className="bg-lightergray rounded-xl mb-4 py-2 px-28 border-2 border-lightergray transition-all hover:bg-white hover:border-lightergray">
                                                          <span className="font-semibold opacity-70">View</span>
                                                      </button>
                                                  </Link>

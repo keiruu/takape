@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import CafeDataService from "../services/CafeDataService";
 import { Link } from "react-router-dom";
 import Navbar from '../components/Navbar'
@@ -7,9 +7,11 @@ import 'tippy.js/dist/tippy.css';
 import { useAuth } from '../contexts/AuthContext'
 
 import '../styles/App.css'
+import { CafeContext } from "../contexts/CafeContext";
 
 export const Cafes = props => {
     const {currentUser, userUID} = useAuth()
+    const cafecont = useContext(CafeContext)
 
     const initialCafeState = {
         id: null,
@@ -101,7 +103,7 @@ export const Cafes = props => {
 
                 </div>
 
-                <div className="text-center bg-white pt-10 rounded-3xl flex flex-col gap-y-4 pb-">
+                <div className="text-center bg-white pt-10 rounded-3xl flex flex-col gap-y-4 ">
                     <h4 className="font-bold text-2xl mb-8"> Reviews </h4>
                     
                         {cafe.reviews.length > 0 ? 
