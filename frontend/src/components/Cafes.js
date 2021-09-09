@@ -103,7 +103,7 @@ export const Cafes = props => {
 
                 </div>
 
-                <div className="text-center bg-white pt-10 rounded-3xl flex flex-col gap-y-4 ">
+                <div className="text-center bg-white pt-10 rounded-3xl flex flex-col gap-y-4 pb-20 ">
                     <h4 className="font-bold text-2xl mb-8"> Reviews </h4>
                     
                         {cafe.reviews.length > 0 ? 

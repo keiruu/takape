@@ -9,6 +9,7 @@ export function useCafe() {
 
 export function CafeProvider({children}) {
     const [cafes, setCafes] = useState([])
+    const [selectedCafe, setSelectedCafe] = useState([])
     const [searchName, setSearchName] = useState("")
     const [searchProvince, setSearchProvince] = useState("")
     const [searchCity, setSearchCity] = useState("")
@@ -82,7 +83,9 @@ export function CafeProvider({children}) {
         selected, 
         setSelected,
         loading,
-        setLoading
+        setLoading,
+        setSelectedCafe,
+        selectedCafe
     }
 
 

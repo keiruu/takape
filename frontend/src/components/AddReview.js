@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import CafeDataService from "../services/CafeDataService";
 import { Link, useHistory} from "react-router-dom";
 import {useAuth} from "../contexts/AuthContext"
 import Navbar from "./Navbar";
+import { CafeContext } from "../contexts/CafeContext";
 import Footer from "./Footer";
 
 const AddReview = props => {
     const {currentUser} = useAuth()
     const history = useHistory()
+    const cafe = useContext(CafeContext)
     
     let initialReviewState = ""
     let editing = false;
@@ -69,11 +71,16 @@ const AddReview = props => {
             </div>
             ) : (
             <div>
-                <div className="form-group">
-                <label htmlFor="description">{ editing ? "Edit" : "Create" } Review</label>
+              <div className="flex flex-col m-auto mt-10 gap-y-20">
+                <div className="flex flex-col justify-context items-center bg-white shadow-gray md:w-full lg:w-med p-4 lg:rounded-xl m-auto gap-x-10 py-6">
+                
+                
+                </div>
+                {/* <div className="form-group">
+                <label htmlFor="description" className="text-center font-bold text-3xl">{ editing ? "Edit" : "Create" } Review</label>
                 <input
                     type="text"
-                    className="form-control"
+                    className="border-2 border-black rounded-xl p-2 w-1/2"
                     id="text"
                     required
                     value={review}
@@ -83,7 +90,9 @@ const AddReview = props => {
                 </div>
                 <button onClick={saveReview} className="btn btn-success">
                 Submit
-                </button>
+                </button> */}
+
+                </div>
             </div>
             )}
         </div>
