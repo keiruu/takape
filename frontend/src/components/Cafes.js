@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef} from "react";
 import CafeDataService from "../services/CafeDataService";
 import { Link } from "react-router-dom";
 import Navbar from '../components/Navbar'
@@ -11,7 +11,12 @@ import { CafeContext } from "../contexts/CafeContext";
 
 export const Cafes = props => {
     const {currentUser, userUID} = useAuth()
+    const [show, setShow] = useState(false)
+    const [edit, setEdit] = useState(false)
     const cafecont = useContext(CafeContext)
+    const scrollRef = useRef()
+    const [reviewID, setReviewID] = useState()
+    const yourReviewRef = useRef()
 
     const initialCafeState = {
         id: null,
@@ -41,6 +46,16 @@ export const Cafes = props => {
     useEffect(() => {
         getCafe(props.match.params.id);
     }, [props.match.params.id]);
+
+    useEffect(() => {
+      cafe.reviews.map((rev, index) => {
+        if(userUID === rev.user_id){
+          setEditing(true)
+          setReviewID(rev._id)
+          console.log("Editing is true!")
+        }
+      })
+    });
     
     const deleteReview = (reviewId, index) => {
         CafeDataService.deleteReview(reviewId, userUID)
@@ -56,8 +71,76 @@ export const Cafes = props => {
             console.log(e);
           });
     };
+
+    const scrollHandler = () => {
+      if(editing){
+        yourReviewRef.current.scrollIntoView()
+        setEdit(true)
+      }else{
+        setShow(true)
+        scrollRef.current.scrollIntoView()
+      }
+    }
+
+    // FOR ADDING REVIEWS
+    let initialReviewState = ""
+    const [editing, setEditing] = useState(false)
+
+    if (props.location.state && props.location.state.currentReview) {
+      setEditing(true);
+      initialReviewState = props.location.state.currentReview.text
+    }
+
+    const [review, setReview] = useState(initialReviewState);
+    const [submitted, setSubmitted] = useState(false);
+
+    const handleInputChange = event => {
+        setReview(event.target.value);
+    };
+
+    const saveReview = () => {
+        var data = {
+          text: review,
+          name: currentUser.displayName,
+          user_id: currentUser.uid,
+          cafe_id: props.match.params.id
+        };
+
+      if (editing) {
+        data.review_id = reviewID
+        CafeDataService.updateReview(data)
+          .then(response => {
+            setSubmitted(true);
+            setEdit(false)
+            console.log(response.data);
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      } else {
+          CafeDataService.createReview(data)
+          .then(response => {
+            setSubmitted(true);
+            console.log(response.data);
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      }
+
+    };
+
+    const closeHandler = (id, index) => {
+      console.log("this gets fired")
+      if(edit){
+          setEdit(false)
+          console.log("this gets fired: state")
+      } else {
+        deleteReview(id, index)
+      }
+    }
     
-      return (
+    return (
         <div>
             <Navbar/>
           {cafe ? (
@@ -88,9 +171,9 @@ export const Cafes = props => {
                             <Link to="/cafes" className="block md:hidden">
                               <button className="bg-lightaccent p-3 px-3 md:px-6 text-sm md:text-md transition font-semibold text-accent rounded-lg hover:bg-transparent border-2 border-lightaccent"><i className="fas fa-arrow-left mr-2"></i>Go Back</button>
                             </Link>
-                            <Link to={"/cafes/" + props.match.params.id + "/review"}>
-                                <button className="bg-accent p-3 px-3 md:px-6 text-sm md:text-md transition font-semibold text-white rounded-lg hover:bg-transparent border-2 border-accent hover:text-accent"><i className="fas fa-pen-square mr-2"></i>Review Cafe</button>
-                            </Link> 
+                            {/* <Link to={"/cafes/" + props.match.params.id + "/review"}> */}
+                                <button onClick={scrollHandler} className="bg-accent p-3 px-3 md:px-6 text-sm md:text-md transition font-semibold text-white rounded-lg hover:bg-transparent border-2 border-accent hover:text-accent"><i className="fas fa-pen-square mr-2"></i>Review Cafe</button>
+                            {/* </Link>  */}
                           </div> 
                         </div>
 
@@ -104,31 +187,66 @@ export const Cafes = props => {
                 </div>
 
                 <div className="text-center bg-white pt-10 rounded-3xl flex flex-col gap-y-4 pb-20 ">
-                    <h4 className="font-bold text-2xl mb-8"> Reviews </h4>
-                    
+                    <h4 className="font-bold text-2xl mb-8" ref={scrollRef}> Reviews </h4>
+
+
+                    {show && 
+                      <div className="relative text-left bg-white m-auto flex shadow-gray p-4 w-medsm rounded-xl" >
+                        <div className="w-full pt-2">
+                            <div className="flex justify-end w-full gap-x-2">
+                              <span className="font-bold flex-1">{currentUser.displayName}</span><br/>
+                              <div className="absolute flex gap-x-2 top-1">
+                              <button onClick={() => setShow(false)}className="px-5 p-1 bg-white text-accent border-2 border-accent rounded-lg my-2 text-xs">Cancel</button>
+                              <button onClick={saveReview} className="px-5 p-1 bg-accent text-white rounded-lg my-2 text-xs">Submit</button>
+                              </div>
+                            </div>
+                            <input
+                                type="text"
+                                className="border-2 border-lightergray rounded-lg p-1 w-full"
+                                id="text"
+                                required
+                                name="text"
+                                value={review.text}
+                                onChange={handleInputChange}
+                            />
+                            {/* <span className="text-xs opacity-40">Posted: {review.date}</span> */}
+                        </div>
+                      </div>
+                    }
                         {cafe.reviews.length > 0 ? 
-                            (cafe.reviews.map((review, index) => {
+                            (cafe.reviews.map((reviews, index) => {
                             return (
                                 <div className="relative text-left bg-white m-auto flex shadow-gray p-4 w-medsm rounded-xl" key={index}>
-                                    <div>
-                                        <span className="font-bold">{review.name}</span><br/>
-                                        <h1>{review.text}</h1>
-                                        <span className="text-xs opacity-40">Posted: {review.date}</span>
-                                       
+                                    <div className="w-full">
+                                        <span className="font-bold">{reviews.name}</span><br/>
+                                        {edit && userUID === reviews.user_id ? (
+                                          <div>
+                                            <input
+                                                type="text"
+                                                className="border-2 border-lightergray rounded-lg p-1 w-full"
+                                                id="text"
+                                                required
+                                                name="text"
+                                                value={review}
+                                                onChange={(event) => setReview(event.target.value)}
+                                            />
+                                          </div>
+                                        ) : <h1>{reviews.text}</h1>}
+                                        <span className="text-xs opacity-40">Posted: {reviews.date}</span>
 
-                                        {userUID === review.user_id &&
-                                            <div className="flex gap-x-5 absolute right-5 top-4">
-                                              <Link to={{
+                                        {userUID === reviews.user_id &&
+                                            <div ref={yourReviewRef} className="flex gap-x-5 absolute right-5 top-4">
+                                              {/* <Link to={{
                                                 pathname: "/cafes/" + props.match.params.id + "/review",
                                                 state: {
                                                   currentReview: review
                                                 }
-                                              }}>
-                                                <button className="text-green-500">
-                                                  <i class="fas fa-edit"></i>
+                                              }}> 
+                                              </Link>*/}
+                                                <button onClick={edit ? () => saveReview() : ()=> setEdit(true)} className="text-green-500">
+                                                  <i className={edit ? "fas fa-check-square" : "fas fa-edit"}></i>
                                                 </button>
-                                              </Link>
-                                              <button onClick={() => deleteReview(review._id, index)} className="text-accent"><i class="fas fa-trash"></i></button>
+                                              <button onClick={() => closeHandler(reviews._id, index)} className="text-accent"><i className={edit ? "fas fa-window-close" : "fas fa-trash"}></i></button>
                                             </div>                   
                                         }
                                     </div>

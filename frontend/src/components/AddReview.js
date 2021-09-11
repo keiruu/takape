@@ -32,30 +32,30 @@ const AddReview = props => {
         name: props.user.name,
         user_id: props.user.id,
         cafe_id: props.match.params.id
-        };
+      };
 
-    if (editing) {
-      data.review_id = props.location.state.currentReview._id
-      CafeDataService.updateReview(data)
-        .then(response => {
-          setSubmitted(true);
-          console.log(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    } else {
-        CafeDataService.createReview(data)
-        .then(response => {
-          setSubmitted(true);
-          console.log(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    }
+      if (editing) {
+        data.review_id = props.location.state.currentReview._id
+        CafeDataService.updateReview(data)
+          .then(response => {
+            setSubmitted(true);
+            console.log(response.data);
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      } else {
+          CafeDataService.createReview(data)
+          .then(response => {
+            setSubmitted(true);
+            console.log(response.data);
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      }
 
-  };
+    };
 
     return (
         <div>
@@ -76,7 +76,7 @@ const AddReview = props => {
                 
                 
                 </div>
-                {/* <div className="form-group">
+                <div className="form-group">
                 <label htmlFor="description" className="text-center font-bold text-3xl">{ editing ? "Edit" : "Create" } Review</label>
                 <input
                     type="text"
@@ -90,7 +90,7 @@ const AddReview = props => {
                 </div>
                 <button onClick={saveReview} className="btn btn-success">
                 Submit
-                </button> */}
+                </button>
 
                 </div>
             </div>
