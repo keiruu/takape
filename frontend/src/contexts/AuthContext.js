@@ -17,8 +17,15 @@ export function AuthProvider({children}) {
     let [color, setColor] = useState("#C9593F");
 
 
-    function signup(email, password){
-        return auth.createUserWithEmailAndPassword(email, password)
+    function signup(name, email, password){
+        return (auth.createUserWithEmailAndPassword(email, password)
+            .then((res) => {
+                const user = auth.currentUser;
+                return user.updateProfile({
+                    displayName: name
+                })
+            })
+        )
     }
 
     function login(email, password){

@@ -10,7 +10,7 @@ export default function Signup() {
 
     const signup_emailRef = useRef()
     const signup_passwordRef = useRef()
-    const signup_passwordconfirmRef = useRef()
+    const signup_nameRef = useRef()
     const {login, signup} = useAuth()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
@@ -19,20 +19,20 @@ export default function Signup() {
     async function handleSignup(e) {
         e.preventDefault()
     
-        if(signup_passwordRef.current.value !== signup_passwordconfirmRef.current.value){
-            setError("Passwords don't match")
-            setShowError(true)
-        } else {
+        // if(signup_passwordRef.current.value !== signup_passwordconfirmRef.current.value){
+        //     setError("Passwords don't match")
+        //     setShowError(true)
+        // } else {
             try {
                 setError("")
                 setLoading(true)
-                await signup(signup_emailRef.current.value, signup_passwordRef.current.value)
+                await signup(signup_nameRef.current.value, signup_emailRef.current.value, signup_passwordRef.current.value)
                 history.push('/')
               } catch(err) {
                 setError(err.message)
                 setShowError(true)
               }
-        }
+        
     
         setLoading(false)
     }
@@ -60,6 +60,11 @@ export default function Signup() {
                         <Link to="/login" className="underline text-darkaccent transition-all hover:text-accent text-sm md:text-md">Sign in</Link>
                     </div>
                     <form className="flex flex-col mt-8 lg:m-0" action="#" onSubmit={handleSignup}>
+                        <div>
+                            <i className="fas fa-user absolute py-8 px-4 text-gray"></i>
+                            <input className="focus:outline-none focus:ring focus:border-lightaccent hover:border-accent border-2 border-transparent transition-all bg-lightgray p-4 w-72 md:w-80 lg:w-96 md:text-md text-sm rounded-lg my-3 pl-12" type="name" placeholder="What would you like us to call you?" ref={signup_nameRef} />
+                        </div>
+
                         <Tippy visible={showerror} content={error} onClickOutside={() => setShowError(false)}>
                             <div>
                                 <i className="fas fa-envelope absolute py-8 px-4 text-gray"></i>
@@ -70,11 +75,6 @@ export default function Signup() {
                         <div>
                             <i className="fas fa-lock absolute py-8 px-4 text-gray"></i>
                             <input className="focus:outline-none focus:ring focus:border-lightaccent hover:border-accent border-2 border-transparent transition-all bg-lightgray p-4 w-72 md:w-80 lg:w-96 md:text-md text-sm rounded-lg my-3 pl-12" type="password" placeholder="Enter your password" ref={signup_passwordRef} />
-                        </div>
-
-                        <div>
-                            <i className="fas fa-lock absolute py-8 px-4 text-gray"></i>
-                            <input className="focus:outline-none focus:ring focus:border-lightaccent hover:border-accent border-2 border-transparent transition-all bg-lightgray p-4 w-72 md:w-80 lg:w-96 md:text-md text-sm rounded-lg my-3 pl-12" type="password" placeholder="Confirm your password" ref={signup_passwordconfirmRef} />
                         </div>
                         
                         <div>
