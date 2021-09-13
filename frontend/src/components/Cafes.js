@@ -31,12 +31,12 @@ export const Cafes = props => {
       };
       
     const [cafe, setCafe] = useState(initialCafeState);
+    const [trigger, setTrigger] = useState(false)
     
     const getCafe = id => {
         CafeDataService.get(id)
           .then(response => {
             setCafe(response.data);
-            console.log(response.data);
           })
           .catch(e => {
             console.log(e);
@@ -45,21 +45,28 @@ export const Cafes = props => {
     
     useEffect(() => {
         getCafe(props.match.params.id);
-    }, [props.match.params.id]);
+    }, [props.match.params.id, trigger]);
+    
+    const [editing, setEditing] = useState(false)
 
     useEffect(() => {
       cafe.reviews.map((rev, index) => {
-        if(userUID === rev.user_id){
-          setEditing(true)
-          setReviewID(rev._id)
-          console.log("Editing is true!")
+        if(cafe.reviews.length > 0){
+          if(userUID === rev.user_id){
+            setEditing(true)
+            setReviewID(rev._id)
+          }
         }
       })
-    });
+    }, [cafe]);
     
     const deleteReview = (reviewId, index) => {
         CafeDataService.deleteReview(reviewId, userUID)
           .then(response => {
+            setTrigger("delete review")
+            setShow(false)
+            setEditing(false)
+            setEdit(false)
             setCafe((prevState) => {
               prevState.reviews.splice(index, 1)
               return({
@@ -71,6 +78,7 @@ export const Cafes = props => {
             console.log(e);
           });
     };
+
 
     const scrollHandler = () => {
       if(editing){
@@ -84,32 +92,32 @@ export const Cafes = props => {
 
     // FOR ADDING REVIEWS
     let initialReviewState = ""
-    const [editing, setEditing] = useState(false)
 
-    if (props.location.state && props.location.state.currentReview) {
-      setEditing(true);
-      initialReviewState = props.location.state.currentReview.text
-    }
+    // if (props.location.state && props.location.state.currentReview) {
+    //   setEditing(true);
+    //   initialReviewState = props.location.state.currentReview.text
+    // }
 
     const [review, setReview] = useState(initialReviewState);
-    const [submitted, setSubmitted] = useState(false);
+    const [submitted, setSubmitted] = useState();
 
     const handleInputChange = event => {
         setReview(event.target.value);
     };
 
     const saveReview = () => {
-        var data = {
+      var data = {
           text: review,
           name: currentUser.displayName,
           user_id: currentUser.uid,
           cafe_id: props.match.params.id
-        };
-
+      };
+      
       if (editing) {
-        data.review_id = reviewID
-        CafeDataService.updateReview(data)
+          data.review_id = reviewID
+          CafeDataService.updateReview(data)
           .then(response => {
+            setTrigger("update review")
             setSubmitted(true);
             setEdit(false)
             console.log(response.data);
@@ -120,26 +128,29 @@ export const Cafes = props => {
       } else {
           CafeDataService.createReview(data)
           .then(response => {
+            setTrigger("create review")
+            setShow(false)
             setSubmitted(true);
+            setEdit(false)
             console.log(response.data);
           })
           .catch(e => {
             console.log(e);
           });
       }
-
     };
 
     const closeHandler = (id, index) => {
-      console.log("this gets fired")
       if(edit){
+          // Cancel Edit
           setEdit(false)
-          console.log("this gets fired: state")
       } else {
-        deleteReview(id, index)
+          // Delete
+          deleteReview(id, index)
       }
     }
     
+
     return (
         <div>
             <Navbar/>
@@ -188,8 +199,6 @@ export const Cafes = props => {
 
                 <div className="text-center bg-white pt-10 rounded-3xl flex flex-col gap-y-4 pb-20 ">
                     <h4 className="font-bold text-2xl mb-8" ref={scrollRef}> Reviews </h4>
-
-
                     {show && 
                       <div className="relative text-left bg-white m-auto flex shadow-gray p-4 w-medsm rounded-xl" >
                         <div className="w-full pt-2">
@@ -215,7 +224,7 @@ export const Cafes = props => {
                     }
                         {cafe.reviews.length > 0 ? 
                             (cafe.reviews.map((reviews, index) => {
-                            return (
+                              return (
                                 <div className="relative text-left bg-white m-auto flex shadow-gray p-4 w-medsm rounded-xl" key={index}>
                                     <div className="w-full">
                                         <span className="font-bold">{reviews.name}</span><br/>
