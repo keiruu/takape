@@ -52,7 +52,7 @@ export default function Signup() {
             <Navbar/>
 
             <div className="flex-1">
-                <div className="flex flex-col text-center md:text-left mb-10 lg:px-10 md:pl-4 md:flex-row justify-center bg-white lg:p-16 py-20 md:gap-x-20 lg:gap-x-32 rounded-3xl lg:w-med m-auto shadow-gray mt-10">
+                <div className="flex flex-col text-center md:text-left mb-10 lg:px-10 md:pl-4 md:flex-row justify-center bg-white lg:p-16 py-20 md:gap-x-20 lg:gap-x-32 rounded-3xl lg:w-med m-auto shadow-accent mt-10">
                     <div className="items-center">
                         <p className="my-2 mt-2 md:mt-8 text-accent font-semibold">━ Welcome! 👋</p>
                         <p className="font-bold text-5xl md:text-6xl lg:text-7xl my-6 mt-10 text-darkaccent">Sign Up</p>

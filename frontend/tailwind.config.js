@@ -3,9 +3,14 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      inset: {
+        '42': '10.5rem',
+        '18': '4.5rem',
+      },
       boxShadow:{
         gray: '1px -1px 30px 5px rgba(227,227,227,0.75)',
         light: '2px 18px 38px -4px rgba(242,200,186,0.75)',
+        accent: ' 2px 6px 35px 1px rgba(245,225,215,0.75)',
       },
       fontFamily: {
         'varela': ['Varela Round'],

@@ -7,6 +7,10 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import logo from '../img/takapetextandlogo.svg'
 import logoicon from '../img/takapelogo.svg'
 
+import { loadAnimation } from "lottie-web";
+import { defineLordIconElement } from "lord-icon-element";
+
+defineLordIconElement(loadAnimation);
 
 const navigation = [
     { name: 'Home', href: '/', current: true },
@@ -25,7 +29,7 @@ export default function Navbar() {
     let location = useLocation();
     const [isActive, setActive] = useState(false);
     const [error, setError] = useState('')
-    const {logout, currentUser} = useAuth()
+    const {logout, currentUser, userIMG, setUserIMG} = useAuth()
     const history = useHistory()
 
     const HandleClick = (e) => {
@@ -38,6 +42,7 @@ export default function Navbar() {
         setError('')
 
         try{
+            setUserIMG("")
             await logout()
             history.push('/login')
         }catch{
@@ -49,7 +54,7 @@ export default function Navbar() {
 
         <div>
                     
-            <Disclosure as="nav" className="shadow-gray w-full bg-white">
+            <Disclosure as="nav" className="w-full bg-white pt-1">
             {({ open }) => (
                 <>
                 <div className="max-w-5xl mx-auto px-2 sm:px-6 lg:px-8 py-2">
@@ -69,11 +74,13 @@ export default function Navbar() {
                         <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-between">
                             {/* takape logo */}
                             <div className="flex-shrink-0 flex items-center">
-                                <picture>
+                                {/* code for different logos */}
+                                {/* <picture>
                                     <source srcset={logo} media="(min-width: 1024px)" />
                                     <source srcset={logo} media="(min-width: 768px)" />
                                     <img src={logoicon} alt="takape.ph" className="lg:block h-10 w-auto"/>
-                                </picture>
+                                </picture> */}
+                                <img src={logo} alt="takape.ph" className="lg:block h-10 w-auto"/>
                             </div>
 
                             {/* menus */}
@@ -105,13 +112,23 @@ export default function Navbar() {
                         <Menu as="div" className={!currentUser ? "hidden": "inline ml-3 relative z-10"}>
                         <div>
                             <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-
                                 <span className="sr-only">Open user menu</span>
-                                <img
-                                    className="h-8 w-8 rounded-full"
-                                    src="https://i.ibb.co/VpScCK3/Toy-Faces-Colored-BG-29.jpg"
-                                    alt=""
-                                />
+                                {currentUser && currentUser.photoURL ? (
+                                <div>
+                                    <img
+                                        className="h-8 w-8 rounded-full"
+                                        src={userIMG}
+                                        alt=""
+                                    />
+                                </div>) :
+                                (<lord-icon
+                                    src="https://cdn.lordicon.com/dxjqoygy.json"
+                                    stroke="100"
+                                    trigger="hover"
+                                    colors="primary:#C9593F,secondary:#C9593F"
+                                    style={{ width:40, height:40, backgroundColor: "#FFF5E1", borderRadius: 100, padding: 4}}
+                                >
+                                </lord-icon>)}
                             </Menu.Button>
                         </div>
 
@@ -128,31 +145,20 @@ export default function Navbar() {
                             <Menu.Item>
                                 {({ active }) => (
                                 <a
-                                    href="#"
+                                    href="/update-profile"
                                     className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                 >
                                     Your Profile: {currentUser.displayName}
                                 </a>
                                 )}
                             </Menu.Item>
-                            <Menu.Item>
-                                {({ active }) => (
-                                <a
-                                    href="#"
-                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                >
-                                    Settings
-                                </a>
-                                )}
-                            </Menu.Item>
                             <Menu.Item onClick={handleLogout}>
                                 {({ active }) => (
-                                <a
-                                    href="/update-profile"
-                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                <div
+                                    className={classNames(active ? 'bg-gray-100' : '', 'cursor-pointer block px-4 py-2 text-sm text-gray-700')}
                                 >
                                     Sign out
-                                </a>
+                                </div>
                                 )}
                             </Menu.Item>
                             </Menu.Items>

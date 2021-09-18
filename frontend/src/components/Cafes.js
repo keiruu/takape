@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef} from "react";
 import CafeDataService from "../services/CafeDataService";
-import { Link } from "react-router-dom";
+import { Link, useHistory} from "react-router-dom";
 import Navbar from '../components/Navbar'
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -17,6 +17,7 @@ export const Cafes = props => {
     const scrollRef = useRef()
     const [reviewID, setReviewID] = useState()
     const yourReviewRef = useRef()
+    const history = useHistory()
 
     const initialCafeState = {
         id: null,
@@ -165,6 +166,8 @@ export const Cafes = props => {
                         <p className="text-lg">{cafe.address}<br/></p>
 
                         <div className="mt-3 flex gap-x-2 ">
+                              <span className="rounded-lg bg-lightaccent text-accent p-2 text-xs">{cafe.city}</span>
+                              <span className="rounded-lg bg-lightaccent text-accent p-2 text-xs">{cafe.province}</span>
                               <Tippy content="Click to go to their Facebook Page" animation="scale" placement="bottom">
                                 <div className="rounded-lg bg-lightaccent text-accent p-1 px-2">
                                   <a href={cafe.link} target="_blank" rel="noreferrer">
@@ -172,9 +175,6 @@ export const Cafes = props => {
                                   </a>
                                 </div>
                               </Tippy>
-                              <span className="rounded-lg bg-lightaccent text-accent p-2 text-xs">{cafe.city}</span>
-                              <span className="rounded-lg bg-lightaccent text-accent p-2 text-xs">{cafe.province}</span>
-                              
                         </div>
                         
                         <div className="block md:relative mt-14">
@@ -182,9 +182,9 @@ export const Cafes = props => {
                             <Link to="/cafes" className="block md:hidden">
                               <button className="bg-lightaccent p-3 px-3 md:px-6 text-sm md:text-md transition font-semibold text-accent rounded-lg hover:bg-transparent border-2 border-lightaccent"><i className="fas fa-arrow-left mr-2"></i>Go Back</button>
                             </Link>
-                            {/* <Link to={"/cafes/" + props.match.params.id + "/review"}> */}
-                                <button onClick={scrollHandler} className="bg-accent p-3 px-3 md:px-6 text-sm md:text-md transition font-semibold text-white rounded-lg hover:bg-transparent border-2 border-accent hover:text-accent"><i className="fas fa-pen-square mr-2"></i>Review Cafe</button>
-                            {/* </Link>  */}
+                            <Tippy content="Sign in to use this feature!" animation="scale" placement="bottom" disabled={currentUser ? true : false}>
+                                <button onClick={currentUser ? () => scrollHandler() : () => history.push("/")} className="bg-accent p-3 px-3 md:px-6 text-sm md:text-md transition font-semibold text-white rounded-lg hover:bg-transparent border-2 border-accent hover:text-accent"><i className="fas fa-pen-square mr-2"></i>Review Cafe</button>
+                            </Tippy>
                           </div> 
                         </div>
 
