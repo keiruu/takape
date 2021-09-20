@@ -35,6 +35,8 @@ function App() {
                     <Route path="/login" component={Login}/>
                     <Route path="/forgot-password" component={ForgotPassword}/>
                     <PrivateRoute exact path="/" component={Home}/>
+                    <Route path="/about" component={Home}/>
+                    <Route path="/contactus" component={Home}/>
                     <Route exact path="/cafes" component={Cafe}/>
                     <Route 
                       path="/cafes/:id"

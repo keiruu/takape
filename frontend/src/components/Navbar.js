@@ -9,14 +9,14 @@ import logoicon from '../img/takapelogo.svg'
 
 import { loadAnimation } from "lottie-web";
 import { defineLordIconElement } from "lord-icon-element";
-
+import { HashLink } from 'react-router-hash-link';
 defineLordIconElement(loadAnimation);
 
 const navigation = [
-    { name: 'Home', href: '/', current: true },
-    { name: 'Cafe', href: '/cafes', current: false },
-    { name: 'About', href: '/about', current: false },
-    { name: 'Contact Us', href: '/contactus', current: false },
+    { name: 'Home', href: '/', hashlink: false },
+    { name: 'Cafe', href: '/cafes', hashlink: false },
+    { name: 'About', href: 'about', hashlink: true },
+    { name: 'Contact Us', href: 'contactus', hashlink: true },
 ]
   
 function classNames(...classes) {
@@ -87,21 +87,39 @@ export default function Navbar() {
                             <div className="hidden sm:block sm:ml-6">
                                 <div className="flex space-x-6 justify-items-end">
                                     {navigation.map((item) => (
-                                    <NavLink
-                                        key={item.name}
-                                        to={item.href}
-                                        exact 
-                                        activeStyle={{
-                                            borderRadius: "none",
-                                            backgroundColor: "#FFF5E1",
-                                            color: "#C9593F",
-                                        }}
-                                        className='px-3 rounded-lg text-brown transition-all hover:bg-lightaccent hover:text-accent py-2 text-sm font-bold'
-                                    >
-                                        {item.name}
-                                    </NavLink>
-
-                                    ))}
+                                        <div className="pt-2">
+                                            {!item.hashlink ? 
+                                            <NavLink
+                                            key={item.name}
+                                            to={item.href}
+                                            exact 
+                                            activeStyle={{
+                                                borderRadius: "none",
+                                                backgroundColor: "#FFF5E1",
+                                                color: "#C9593F",
+                                            }}
+                                            className='px-3 rounded-lg text-brown transition-all hover:bg-lightaccent hover:text-accent py-2 text-sm font-bold'
+                                            >
+                                                {item.name}
+                                            </NavLink> : 
+                                            <HashLink 
+                                            smooth
+                                            key={item.name}
+                                            to={`/#${item.href}`}
+                                            exact 
+                                            activeStyle={{
+                                                borderRadius: "none",
+                                                backgroundColor: "#FFF5E1",
+                                                color: "#C9593F",
+                                            }}
+                                            className='px-3 rounded-lg text-brown transition-all hover:bg-lightaccent hover:text-accent py-2 text-sm font-bold'
+                                            >
+                                                {item.name}
+                                            </HashLink> 
+                                            }
+                                        </div>
+                                    )
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -116,7 +134,7 @@ export default function Navbar() {
                                 {currentUser && currentUser.photoURL ? (
                                 <div>
                                     <img
-                                        className="h-8 w-8 rounded-full"
+                                        className="h-8 w-8 rounded-full "
                                         src={userIMG}
                                         alt=""
                                     />
@@ -179,17 +197,32 @@ export default function Navbar() {
                 <Disclosure.Panel className="sm:hidden">
                     <div className="px-2 pt-2 pb-3 space-y-1">
                     {navigation.map((item) => (
-                        <a
+                        <div className="pt-2">
+                        {!item.hashlink ? 
+                        <NavLink
                         key={item.name}
-                        href={item.href}
-                        className={classNames(
-                            item.current ? 'bg-fadedbrown text-white' : 'text-brown hover:bg-fadedbrown hover:text-white',
-                            'block px-3 py-2 rounded-md text-base font-medium'
-                        )}
-                        aria-current={item.current ? 'page' : undefined}
+                        to={item.href}
+                        exact
+                        className='text-brown hover:bg-fadedbrown hover:text-white block px-3 py-2 rounded-md text-base w-full font-medium'
                         >
                         {item.name}
-                        </a>
+                        </NavLink> : 
+                        <HashLink 
+                        smooth
+                        key={item.name}
+                        to={`/#${item.href}`}
+                        exact 
+                        activeStyle={{
+                            borderRadius: "none",
+                            backgroundColor: "#FFF5E1",
+                            color: "#C9593F",
+                        }}
+                        className='text-brown hover:bg-fadedbrown hover:text-white block px-3 py-2 rounded-md text-base w-full font-medium'
+                        >
+                            {item.name}
+                        </HashLink> 
+                        }
+                    </div>
                     ))}
                     </div>
                 </Disclosure.Panel>
