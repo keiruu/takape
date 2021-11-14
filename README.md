@@ -2,7 +2,7 @@
 
 🔗 [Visit site](https://takape-vhlum.mongodbstitch.com/#/)
 
-<img src="https://raw.githubusercontent.com/keiruu/Takape/master/frontend/src/img/Takape%20Mockup.png" alt="Website Preview">
+<img src="https://raw.githubusercontent.com/keiruu/takape/master/frontend/src/img/mockup.png" alt="Website Preview">
 
 ## :ledger: About
 Takape is a simple website for finding cafes across Panay Island. So far we have listed only a handful of cafes through crowd-sourcing. <br/>
