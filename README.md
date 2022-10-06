@@ -16,4 +16,4 @@ Takape is an experimental website without real-world value intended for practici
 5. Node.js
 6. Express.js
 
-in collaboration with [Paul Adrian Soncio](https://github.com/illunaaa-PA)
+Collaborators: [Paul Adrian Soncio](https://github.com/illunaaa-PA)
