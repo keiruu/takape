@@ -6,7 +6,7 @@
 
 ## :ledger: About
 Takape is a simple website for finding cafes across Panay Island. So far we have listed only a handful of cafes through crowd-sourcing. <br/>
-Takape is an experimental website without real-world value intended for me to practice and learn the MERN stack and various programming concepts.
+Takape is an experimental website without real-world value intended for practicing and learning the MERN stack and various programming concepts.
 
 ## :mechanical_arm: Tech Stack
 1. React
@@ -15,3 +15,5 @@ Takape is an experimental website without real-world value intended for me to pr
 4. Mongodb (Database and Deployment)
 5. Node.js
 6. Express.js
+
+in collaboration with [Paul Adrian Soncio](https://github.com/illunaaa-PA)
